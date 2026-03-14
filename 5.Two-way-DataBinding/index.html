@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+      <h1>Hello World</h1>
+      
+      <input type="text" v-model.trim="firstName" />  <!-- trim the string -->
+      <br/><br/>
+      <input type="text" v-model.trim="lastName" />  <!-- trim the string -->
+      <input class="margin-left" type="number" v-model.lazy="age" />  <!-- v-model.lazy updates the UI when you focus out of the input -->
+        <p>{{firstName}} is {{age}} years old</p>
+        <p>{{getFullName}}</p> <!-- not a function, so no parentheses-->
+    </div>
+</body>
+<script>
+    const { createApp, ref, reactive, computed, watch } = Vue;
+
+    createApp({
+        
+        setup() {
+           let firstName = ref("Ben")
+           let lastName = ref("Patel")
+           const obj = reactive({ count : 0 })
+           let age = ref(21)
+           let counter = ref(0)
+            
+           const getFullName = computed ((prev) => {  // you can specify previous value. They are cached and are reevaluated only when one of the dependencies changes
+                console.log("getFullName was called");
+                console.log("previous value " + prev);
+                counter.value = counter.value + 1
+                obj.count++   // as being reactive we don't need ".value"
+                return `${firstName.value} ${lastName.value}`
+           })
+
+           watch(  // watchers are not cached instead of computed properties
+            counter, (current, prev) => {
+                console.log(`previous value ${prev}  and current value ${current}`)
+           })
+
+           watch(  // if using reactive we need lambda to implement the getter
+            () => obj.count, (current, prev) => {
+                console.log(`previous value ${prev}  and current value ${current}`)
+           })
+
+            return {
+                firstName, 
+                lastName,
+                age,
+                getFullName, 
+                obj
+            }
+        }
+    }).mount("#app")
+</script>
+<style>
+    .margin-left {
+        margin-left: 20px;
+    }
+</style>
+</html>

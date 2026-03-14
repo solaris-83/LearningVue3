@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <h1>{{message}}</h1>
+        <p> Lucky Number : {{luckyNumber}}</p>
+        <p v-once> Lucky Number rendered once : {{luckyNumber}}</p>  <!-- the value is updated but not rendered in the DOM -->
+        <p> Lucky Numbers : {{luckyNumbers[1]}}</p>
+        <p> Lucky Number is {{luckyNumbers[0]%2 == 0? "even number" : "odd number"}}</p>
+         <p> Random Number is {{updateLuckyNumber()}}</p>
+        <p> Capital letters {{changeToUpperCase(message)}}</p>
+        <p v-html="getMessage()"> </p>
+        <a v-bind:href="urlgoogle">google</a>
+        <p> Employee {{employee.name}} is {{employee.age}} old and salary {{employee.salary}} </p>
+    </div>
+</body>
+<script>
+    const { createApp, ref, reactive } = Vue;
+
+    createApp({
+        setup() {
+            const message = ref("Hello Vue3!")
+            let luckyNumber = ref(13)
+            const luckyNumbers = [3, 6, 4, 8]
+            /* const employee = ref({
+                name: "John", 
+                age: 40, 
+                salary: 50000
+            }) */
+            const urlgoogle = "https:\\www.google.com"
+            // reactive for updating object, not working for primitive types
+            const employee = reactive({
+                name: "John", 
+                age: 40, 
+                salary: 50000
+            })
+
+            function getRandomLuckyNumer() {
+                luckyNumber.value = Math.floor(Math.random()* 10)+1
+                console.log(luckyNumber.value)
+                return  luckyNumber.value
+            }
+
+            function updateLuckyNumber() {
+                setTimeout(() => {
+                luckyNumber.value = 77,
+              //  employee.value.salary = 10000 this works only when using ref
+                employee.salary = 10000 // this works only when using reactive
+                console.log(employee)
+                console.log(luckyNumber)
+                }, 2000);
+            }
+
+
+            function changeToUpperCase(msg){
+                return msg.toUpperCase()
+            }
+
+            function getMessage(msg){
+                return `<h1><u>${message.value}</u></h1>`
+            }
+
+            return {
+              message, 
+              luckyNumber, 
+              luckyNumbers, 
+              employee,
+              getRandomLuckyNumer, 
+              changeToUpperCase, 
+              updateLuckyNumber,
+              getMessage,
+              urlgoogle
+            }
+        }
+    }).mount("#app")
+</script>
+</html>

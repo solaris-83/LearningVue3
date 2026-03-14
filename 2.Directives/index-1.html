@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <h1>{{message}}</h1>
+        <p> Lucky Numbers : {{luckyNumbers}}</p>
+        <p> Employee : {{employee}}</p>
+
+        <p v-show="employee.hasCorporateCard"> Spending limit for card (v-show): {{employee.spendingLimit}}</p> <!-- display:none in DOM -->
+
+        <p v-if="employee.hasCorporateCard"> Spending limit for card (v-if): {{employee.spendingLimit}}</p> <!-- not present in DOM -->
+
+        <p v-else-if="employee.salary > 40000 && employee.yearsWithCompany > 1"> Spending limit for card (v-else-if): {{employee.spendingLimit}}</p> <!-- not present in DOM -->
+
+        <p v-else> No card</p>
+
+        <p v-for="(num, index) in luckyNumbers" :key="num">
+          <br/> {{index}}. {{num}}
+        </p>
+
+        <ul v-for="(proj, index) in employee.projects" :key="proj.project">
+            <li> {{index+1}}. {{proj.project}}. {{proj.timeLine}}</li>
+        <ul>
+
+        <ul v-for="(key, value) in employee" :key="key">
+            <li> {{value}}: {{key}}</li>
+        <ul>
+    </div>
+</body>
+<script>
+    const { createApp, ref, reactive } = Vue;
+
+    createApp({
+        setup() {
+            const message = ref("Hello Vue3!")
+            let luckyNumbers = [3, 6, 4, 8]
+            // reactive for updating object, not working for primitive types
+            const employee = reactive({
+                name: "John", 
+                age: 40, 
+                salary: 50000,
+                hasCorporateCard: false,
+                spendingLimit: 10000,
+                yearsWithCompany: 5,
+                projects: [
+                    { project: "Line A", timeLine: "1 year"},
+                    { project: "Line B", timeLine: "2 year"},
+                    { project: "Line C", timeLine: "3 year"}
+                ]
+            })
+
+            return {
+              message, 
+              luckyNumbers, 
+              employee,
+            }
+        }
+    }).mount("#app")
+</script>
+</html>

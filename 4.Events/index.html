@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+      <h1>Hello World</h1>
+      
+      <input type="text" v-model="message" @keyup.enter="pressedKey(message)"/>
+      <button @click="clearMessage()">Clear</button> 
+
+      <div @click.once="buttonClick('in the div', $event)">Something exciting
+        <br/>
+        <button @click.stop="buttonClick('Vue is exciting', $event)">Click me</button> <!-- simple onclick -->
+      </div>
+
+      <p>X: {{x}}</p>
+      <p>Y: {{y}}</p>
+
+    <a href="https://www.google.com" @click.prevent="buttonClick('prevent from navigating to link provided', $event)">Google</a>
+    </div>
+</body>
+<script>
+    const { createApp, ref, reactive } = Vue;
+
+    createApp({
+        
+        setup() {
+           const message = ref("Title")
+            let x = ref(0)
+            let y = ref(0)
+
+            function pressedKey(newMessage){
+                alert(newMessage)
+            }
+
+            function clearMessage() {
+                message.value = ""
+            }
+           function buttonClick(newMessage, event) {
+                alert(newMessage)
+                x.value = event.x
+                y.value = event.y
+            }
+            
+            
+            return {
+              message, 
+              buttonClick,
+              x,
+              y,
+              pressedKey,
+              clearMessage
+            }
+        }
+    }).mount("#app")
+</script>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+
+        <span class="padding-medium">Random text</span>  <!-- this is js and css not vue-->
+        <br/>
+        <span class="padding-medium" :class="{h1:true}">Random text</span>  <!-- binding class -->
+        <span class="padding-medium" :class="{h1:true, 'bg-gray': true}">Random text</span>  <!-- binding class -->
+        <br/>
+        <br/>
+        <span class="padding-medium" :class="{h1:isMainTitle(), 'bg-green': hasGreenBackground()}">Random text</span>  <!-- Since we have an hyphen, you must write 'bg-green' (binding class) -->
+
+        <br/>
+        <div class="padding-medium" :class="mainTitle">Random text bound to mainTitle</div>  <!-- binding class to property -->
+        
+        <br/>
+        <span class="padding-medium" :class="[isMainTitle() ? mainTitle: '', borderClass]">Random text</span> <!-- multiple classes binding-->
+    </div>
+</body>
+<script>
+    const { createApp, ref, reactive } = Vue;
+
+    createApp({
+        setup() {
+            const message = ref("Hello Vue3!")
+            const style1 = reactive({color: 'red', fontSize: '40px'})
+            const style2 = reactive({'color': 'red', 'font-size': '40px'})
+            const fontSizeTemp = 60
+
+            const mainTitle = {
+                h1: true, 
+                'bg-gray': true
+            }
+
+            const borderClass = {
+                border: true
+            }
+
+            const someStyle = {
+                fontSize: "40px",
+                backgroundColor: "red",
+                margin: "20px", 
+                border: "1px solid black"
+            }
+
+            const someInnerStyle = {
+                inner: {
+                    fontSize: "40px",
+                    backgroundColor: "red",
+                    margin: "20px", 
+                    border: "1px solid black"
+                }
+            }
+
+            function isMainTitle(){
+                return true;
+            }
+
+            function hasGreenBackground(){
+                return true;
+            }
+            return {
+              message,
+              style1,
+              style2,
+              fontSizeTemp,
+              isMainTitle,
+              hasGreenBackground,
+              mainTitle,
+              someStyle,
+              someInnerStyle,
+              borderClass
+            }
+        }
+    }).mount("#app")
+</script>
+<style>
+    .h1{
+        font-size: 60px;
+        color: green;
+    }
+    .h2{
+        font-size: 40px;
+        color: red;
+    }
+    .bg-gray{
+        background-color: gray;
+    }
+    .bg-green {
+        background-color: green;
+    }
+    .padding-medium {
+        padding: 20px;
+    }
+    .border {
+        border: 2px solid red;
+    }
+</style>
+</html>

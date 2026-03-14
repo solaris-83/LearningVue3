@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <div :style="{backgroundColor: 'aqua', fontSize: '30px'}">{{message}} 30px</div>  <!--bind style properties -->
+        <div :style="{backgroundColor: 'aqua', fontSize: fontSizeTemp + 'px'}">{{message}}</div>  <!--bind style properties -->
+        <div :style="{'background-color': 'aqua', 'font-size': '40px'}">{{message}}</div>  <!--bind style properties -->
+        <div :style="style1">{{message}}</div>  <!--bind an objecy to style -->
+        <div :style="style2">{{message}}</div>  <!--bind an objecy to style -->
+        <div :style="isActive ? style1 : style2">{{message}} with settimeout</div>  <!--ternary operator to bind style -->
+        <div :style="someStyle">{{message}}</div>  <!--bind an objecy to style -->
+    </div>
+</body>
+<script>
+    const { createApp, ref, reactive, onMounted } = Vue; // extract 3 consts from Vue
+
+    createApp({
+        setup() {
+            const message = ref("Hello Vue3!")
+            const style1 = {color: 'red', fontSize: '30px'}
+            const style2 = {'color': 'blue', 'font-size': '40px'}
+            const fontSizeTemp = 60
+
+            let isActive = ref(false);
+
+            function setIsActive(){
+                setTimeout(() => {
+                    isActive.value = true
+                    }, 2000);
+            }
+
+            const someStyle = {
+                fontSize: "40px",
+                backgroundColor: "red",
+                margin: "20px", 
+                border: "12px solid black"
+            }
+
+
+            onMounted(() =>  setIsActive())
+
+            return {
+              message,
+              style1,
+              style2,
+              fontSizeTemp,
+              isActive,
+              setIsActive,
+              someStyle
+            }
+        }
+    }).mount("#app")
+</script>
+</html>

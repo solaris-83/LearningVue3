@@ -10,17 +10,18 @@ let movies = reactive([
   { title: "The Matrix", year: 1999 }
 ]);
 
-let title = ref('')
-let year = ref()
+let newMovie = reactive({title : '', year : null})
+
+
 const titlePlaceholder = 'Movie title'
 const yearPlaceholder = 'Year'
 
 function addMovie() {
-  if (!title.value || !year.value) 
+  if (!newMovie.title || !newMovie.year) 
     return
-  movies.push({title : title.value, year : year.value})
-  title.value = ''
-  year.value = null
+  movies.push({title : newMovie.title, year : newMovie.year})
+  newMovie.title = ''
+  newMovie.year = null
 }
 
 function removeLastMovie() {
@@ -29,7 +30,7 @@ function removeLastMovie() {
 }
 
 const isAddButtonDisabled = computed(() => 
-   !title.value || !year.value
+   !newMovie.title || !newMovie.year
 )
 
 const isRemoveButtonDisabled = computed(() => 
@@ -50,11 +51,11 @@ const isRemoveButtonDisabled = computed(() =>
 
           <div class="row g-2">
             <div class="col-md-5">
-              <input id="titleInput" class="form-control" v-model="title" :placeholder="titlePlaceholder">
+              <input id="titleInput" class="form-control" v-model="newMovie.title" :placeholder="titlePlaceholder">
             </div>
 
             <div class="col-md-3">
-              <input id="yearInput" type="number" class="form-control" v-model="year" :placeholder="yearPlaceholder">
+              <input id="yearInput" type="number" class="form-control" v-model="newMovie.year" :placeholder="yearPlaceholder">
             </div>
 
             <div class="col-md-2">
@@ -62,7 +63,7 @@ const isRemoveButtonDisabled = computed(() =>
                 Add Movie
               </button>
               <button @click="removeLastMovie()" :disabled="isRemoveButtonDisabled" class="btn btn-danger w-100">
-                Add Movie
+                Remove Movie
               </button>
             </div>
           </div>

@@ -58,6 +58,8 @@ const isRemoveButtonDisabled = computed(() =>
               <input id="yearInput" type="number" class="form-control" v-model="newMovie.year" :placeholder="yearPlaceholder">
             </div>
 
+            <span v-if="movies.length >= 5">You can only add 5 movies</span>
+
             <div class="col-md-2">
               <button @click="addMovie()" :disabled="isAddButtonDisabled" class="btn btn-primary w-100">
                 Add Movie

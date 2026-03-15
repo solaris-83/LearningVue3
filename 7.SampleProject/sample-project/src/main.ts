@@ -1,5 +1,10 @@
 import { createApp } from 'vue'
 import './style.css'
-import App from './App.vue'
 
-createApp(App).mount('#app')
+// global import
+import App from './App.vue'
+import Component from './components/Component.vue'
+
+const app = createApp(App)
+app.component('my-component', Component)
+app.mount('#app')

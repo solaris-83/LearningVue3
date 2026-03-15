@@ -66,11 +66,11 @@ watch(movies, () => {
 
           <div class="row g-2">
             <div class="col-md-5">
-              <input id="titleInput" class="form-control" v-model="newMovie.title" :placeholder="titlePlaceholder">
+              <input id="titleInput" class="form-control" v-model.trim="newMovie.title" :placeholder="titlePlaceholder">
             </div>
 
             <div class="col-md-3">
-              <input id="yearInput" type="number" class="form-control" v-model="newMovie.year"
+              <input id="yearInput" type="number" class="form-control" v-model.trim="newMovie.year"
                 :placeholder="yearPlaceholder">
             </div>
 

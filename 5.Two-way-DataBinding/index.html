@@ -37,14 +37,12 @@
                 obj.count++   // as being reactive we don't need ".value"
                 return `${firstName.value} ${lastName.value}`
            })
-
-           watch(  // watchers are not cached instead of computed properties
-            counter, (current, prev) => {
+            // watchers are not cached instead of computed properties
+           watch(counter, (current, prev) => {
                 console.log(`previous value ${prev}  and current value ${current}`)
            })
-
-           watch(  // if using reactive we need lambda to implement the getter
-            () => obj.count, (current, prev) => {
+           // if using reactive we need lambda to implement the getter
+           watch(() => obj.count, (current, prev) => {
                 console.log(`previous value ${prev}  and current value ${current}`)
            })
 

@@ -23,8 +23,17 @@ function addMovie() {
   year.value = null
 }
 
+function removeLastMovie() {
+  if (movies.length > 0)
+    movies.pop()
+}
+
 const isAddButtonDisabled = computed(() => 
    !title.value || !year.value
+)
+
+const isRemoveButtonDisabled = computed(() => 
+   movies.length === 0
 )
 
 </script>
@@ -50,6 +59,9 @@ const isAddButtonDisabled = computed(() =>
 
             <div class="col-md-2">
               <button @click="addMovie()" :disabled="isAddButtonDisabled" class="btn btn-primary w-100">
+                Add Movie
+              </button>
+              <button @click="removeLastMovie()" :disabled="isRemoveButtonDisabled" class="btn btn-danger w-100">
                 Add Movie
               </button>
             </div>

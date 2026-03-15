@@ -1,43 +1,58 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import viteLogo from '../assets/vite.svg'
 import heroImg from '../assets/hero.png'
 import vueLogo from '../assets/vue.svg'
 
 let movies = reactive([
-  { title: "Inception", year: 2010 },
-  { title: "Interstellar", year: 2014 },
-  { title: "The Matrix", year: 1999 }
+  { checked: true, title: "Inception", year: 2010 },
+  { checked: false, title: "Interstellar", year: 2014 },
+  { checked: false, title: "The Matrix", year: 1999 }
 ]);
 
-let newMovie = reactive({title : '', year : null})
+let newMovie = reactive({ checked: false, title: '', year: null })
 
+let showMessage = ref(false)
 
 const titlePlaceholder = 'Movie title'
 const yearPlaceholder = 'Year'
 
-function addMovie() {
-  if (!newMovie.title || !newMovie.year) 
+function addMovie(): void {
+  if (!newMovie.title || !newMovie.year)
     return
-  movies.push({title : newMovie.title, year : newMovie.year})
+  movies.push({ checked: newMovie.checked, title: newMovie.title, year: newMovie.year })
   newMovie.title = ''
   newMovie.year = null
 }
 
-function removeLastMovie() {
-  if (movies.length > 0)
-    movies.pop()
+function removeMovie(): void {
+  let cnt = movies.filter((m) => m.checked)
+  cnt.forEach(m => {
+    let idx = movies.indexOf(m)
+    if (idx > -1)
+      movies.splice(idx, 1)
+  })
 }
 
-const isAddButtonDisabled = computed(() => 
-   !newMovie.title || !newMovie.year
+const isAddButtonDisabled = computed(() =>
+  !newMovie.title || !newMovie.year
 )
 
-const isRemoveButtonDisabled = computed(() => 
-   movies.length === 0
+const isRemoveButtonDisabled = computed(() =>
+  movies.filter((movie) => movie.checked).length == 0
 )
+
+watch(movies, () => {
+  showMessage.value = movies.length >= 5;
+})
 
 </script>
+
+<style>
+.active {
+  color: red;
+}
+</style>
 
 <template>
   <div class="bg-light">
@@ -55,16 +70,19 @@ const isRemoveButtonDisabled = computed(() =>
             </div>
 
             <div class="col-md-3">
-              <input id="yearInput" type="number" class="form-control" v-model="newMovie.year" :placeholder="yearPlaceholder">
+              <input id="yearInput" type="number" class="form-control" v-model="newMovie.year"
+                :placeholder="yearPlaceholder">
             </div>
 
-            <span v-if="movies.length >= 5">You can only add 5 movies</span>
+            <span :style="{ fontWeight: 'bold', color: 'red' }" v-if="showMessage">You can only add 5
+              movies</span>
 
             <div class="col-md-2">
-              <button @click="addMovie()" :disabled="isAddButtonDisabled" class="btn btn-primary w-100">
+              <button @click="addMovie()" v-show="!showMessage" :disabled="isAddButtonDisabled"
+                class="btn btn-primary w-100">
                 Add Movie
               </button>
-              <button @click="removeLastMovie()" :disabled="isRemoveButtonDisabled" class="btn btn-danger w-100">
+              <button @click="removeMovie()" :disabled="isRemoveButtonDisabled" class="btn btn-danger w-100">
                 Remove Movie
               </button>
             </div>
@@ -77,6 +95,7 @@ const isRemoveButtonDisabled = computed(() =>
       <table class="table table-striped">
         <thead>
           <tr>
+            <th></th>
             <th>Title</th>
             <th>Year</th>
           </tr>
@@ -84,8 +103,9 @@ const isRemoveButtonDisabled = computed(() =>
 
         <tbody id="movieTable">
           <tr v-for="item in movies" :key="item.title">
-            <th>{{ item.title }}</th>
-            <th>{{ item.year }}</th>
+            <th><input type="checkbox" v-model="item.checked"></input></th>
+            <th><span :class="{ active: item.checked }">{{ item.title }}</span></th>
+            <th><span :class="{ active: item.checked }">{{ item.year }}</span></th>
           </tr>
         </tbody>
 

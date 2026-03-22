@@ -3,8 +3,8 @@ import './style.css'
 
 // global import
 import App from './App.vue'
-import Component from './components/Component.vue'
+import ChildComponent from './components/ChildComponent.vue'
 
 const app = createApp(App)
-app.component('my-component', Component)
+app.component('my-child-component', ChildComponent)
 app.mount('#app')
